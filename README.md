@@ -12,7 +12,7 @@ Link Librería: https://github.com/FullStackEggDRoa/libreria_comun.git
 # Desde Netbeans: 
 Propiedades de Proyecto / Librerías / Class Path / Adicionar Proyecto (Add Project) / (Ubicar Directorio Librería)
 
-## Ejercicio 3
-Link Resultados: https://github.com/FullStackEggDRoa/dia_95/blob/main/Ejercicio_3.md
+## Ejercicio Extra 1
+Link Resultados: https://github.com/FullStackEggDRoa/dia_95/blob/main/Ejercicio_Extra_1.md
 <br>
-Link Script MySQL: https://github.com/FullStackEggDRoa/dia_95/blob/main/Ejercicio_3.sql
+Link Script MySQL: https://github.com/FullStackEggDRoa/dia_95/blob/main/Ejercicio_Extra_1.sql
