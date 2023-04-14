@@ -1601,3 +1601,21 @@ SELECT Nombre_equipo AS "Nombre Equipo", COUNT(codigo) AS "Numero de Jugadores" 
 | Wizards       |                  13 |
 +---------------+---------------------+
 ```
+### 12. Mostrar el jugador que más puntos ha realizado en toda su carrera.
+```
+SELECT Nombre AS "Nombre Jugador", SUM(Puntos_por_partido) AS "Record Puntos 1er Lugar" FROM estadisticas INNER JOIN jugadores ON estadisticas.jugador = jugadores.codigo GROUP BY Nombre ORDER BY SUM(Puntos_por_partido) DESC LIMIT 1;
++-----------------+-------------------------+
+| Nombre Jugador  | Record Puntos 1er Lugar |
++-----------------+-------------------------+
+| Shaquille ONeal |       397.7499990463257 |
++-----------------+-------------------------+
+```
+### 13. Mostrar el nombre del equipo, conferencia y división del jugador más alto de la NBA.
+```
+SELECT Nombre AS "Nombre Equipo", Conferencia, Division FROM equipos WHERE Nombre = (SELECT Nombre_equipo FROM jugadores ORDER BY Altura DESC LIMIT 1);
++---------------+-------------+-----------+
+| Nombre Equipo | Conferencia | Division  |
++---------------+-------------+-----------+
+| Rockets       | West        | SouthWest |
++---------------+-------------+-----------+
+```
