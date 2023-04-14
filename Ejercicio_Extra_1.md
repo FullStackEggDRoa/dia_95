@@ -1619,3 +1619,305 @@ SELECT Nombre AS "Nombre Equipo", Conferencia, Division FROM equipos WHERE Nombr
 | Rockets       | West        | SouthWest |
 +---------------+-------------+-----------+
 ```
+### 14. Mostrar la media de puntos en partidos de los equipos de la división Pacific.
+```
+SELECT AVG(puntos_local) AS "Media Puntos Locales", AVG(puntos_visitante) AS "Media Puntos Visitantes"  FROM partidos WHERE equipo_local IN ( SELECT Nombre FROM equipos WHERE Division = "Pacific") AND equipo_visitante IN (SELECT Nombre FROM equipos WHERE Division = "Pacific");
++----------------------+-------------------------+
+| Media Puntos Locales | Media Puntos Visitantes |
++----------------------+-------------------------+
+|             103.1278 |                104.3417 |
++----------------------+-------------------------+
+1 row in set (0,02 sec)
+```
+### 15. Mostrar el partido o partidos (equipo_local, equipo_visitante y diferencia) con mayor diferencia de puntos.
+```
+SELECT equipo_local AS "Equipo Local", equipo_visitante  AS "Equipo Visitante", (puntos_local - puntos_visitante) AS Diferencia FROM partidos WHERE (puntos_local - puntos_visitante) = (SELECT MAX(puntos_local - puntos_visitante) FROM partidos);
++--------------+------------------+------------+
+| Equipo Local | Equipo Visitante | Diferencia |
++--------------+------------------+------------+
+| Magic        | Suns             |        108 |
++--------------+------------------+------------+
+```
+### 16. Mostrar la media de puntos en partidos de los equipos de la división Pacific.
+```
+Repetición del Ejercicios 14
+```
+### 17. Mostrar los puntos de cada equipo en los partidos, tanto de local como de visitante.
+```
+ SELECT equipo_local AS "Nombre Equipo", SUM(puntos_local) AS "Puntos como Local" FROM partidos GROUP BY equipo_local;;
++---------------+-------------------+
+| Nombre Equipo | Puntos como Local |
++---------------+-------------------+
+| 76ers         |             55164 |
+| Bobcats       |             53855 |
+| Bucks         |             53997 |
+| Bulls         |             53411 |
+| Cavaliers     |             53195 |
+| Celtics       |             54500 |
+| Clippers      |             54731 |
+| Grizzlies     |             54925 |
+| Hawks         |             54954 |
+| Heat          |             53580 |
+| Hornets       |             54211 |
+| Jazz          |             54186 |
+| Kings         |             53457 |
+| Knicks        |             54987 |
+| Lakers        |             53383 |
+| Magic         |             54728 |
+| Mavericks     |             54248 |
+| Nets          |             53962 |
+| Nuggets       |             54173 |
+| Pacers        |             54091 |
+| Pistons       |             55100 |
+| Raptors       |             53485 |
+| Rockets       |             55158 |
+| Spurs         |             53744 |
+| Suns          |             52053 |
+| Supersonics   |             54461 |
+| Timberwolves  |             55471 |
+| Trail Blazers |             53321 |
+| Warriors      |             55562 |
+| Wizards       |             53587 |
++---------------+-------------------+
+SELECT equipo_visitante  AS "Nombre Equipo", SUM(puntos_visitante) AS "Puntos como Visitante" FROM partidos GROUP BY equipo_visitante;
++---------------+-----------------------+
+| Nombre Equipo | Puntos como Visitante |
++---------------+-----------------------+
+| 76ers         |                 54582 |
+| Bobcats       |                 52643 |
+| Bucks         |                 53895 |
+| Bulls         |                 54307 |
+| Cavaliers     |                 52922 |
+| Celtics       |                 54570 |
+| Clippers      |                 54443 |
+| Grizzlies     |                 53741 |
+| Hawks         |                 54972 |
+| Heat          |                 53589 |
+| Hornets       |                 52795 |
+| Jazz          |                 52299 |
+| Kings         |                 54113 |
+| Knicks        |                 54450 |
+| Lakers        |                 54661 |
+| Magic         |                 55034 |
+| Mavericks     |                 53741 |
+| Nets          |                 54915 |
+| Nuggets       |                 53517 |
+| Pacers        |                 54372 |
+| Pistons       |                 53151 |
+| Raptors       |                 55042 |
+| Rockets       |                 53756 |
+| Spurs         |                 53382 |
+| Suns          |                 53644 |
+| Supersonics   |                 55550 |
+| Timberwolves  |                 54766 |
+| Trail Blazers |                 54655 |
+| Warriors      |                 54754 |
+| Wizards       |                 55791 |
++---------------+-----------------------+
+```
+### 18. Mostrar quien gana en cada partido (codigo, equipo_local, equipo_visitante, equipo_ganador), en caso de empate sera null.
+```
+SELECT codigo AS "Codigo", equipo_local AS "Equipo Local", equipo_visitante  AS "Equipo Visitante", IF((puntos_local - puntos_visitante)<0,"Visitante",IF((puntos_local - puntos_visitante)=0,NULL,"Local")) AS "Equipo Ganador" FROM partidos;
++--------+---------------+------------------+----------------+
+| Codigo | Equipo Local  | Equipo Visitante | Equipo Ganador |
++--------+---------------+------------------+----------------+
+|      1 | Raptors       | Lakers           | Visitante      |
+|      2 | Raptors       | Grizzlies        | Visitante      |
+|      3 | Raptors       | Clippers         | Local          |
+|      4 | Raptors       | Knicks           | Visitante      |
+|      5 | Raptors       | Timberwolves     | Visitante      |
+|      6 | Raptors       | Celtics          | Visitante      |
+|      7 | Raptors       | 76ers            | Visitante      |
+|      8 | Raptors       | Nets             | Visitante      |
+|      9 | Raptors       | Pistons          | Local          |
+|     10 | Raptors       | Cavaliers        | Visitante      |
+|     11 | Raptors       | Pacers           | Local          |
+|     12 | Raptors       | Bulls            | Local          |
+|     13 | Raptors       | Bucks            | Visitante      |
+|     14 | Raptors       | Magic            | Visitante      |
+|     15 | Raptors       | Wizards          | Local          |
+|     16 | Raptors       | Hawks            | Visitante      |
+|     17 | Raptors       | Bobcats          | Local          |
+|     18 | Raptors       | Heat             | Local          |
+|     19 | Raptors       | Jazz             | Local          |
+|     20 | Raptors       | Nuggets          | Visitante      |
+|     21 | Raptors       | Trail Blazers    | Local          |
+|     22 | Raptors       | Supersonics      | NULL           |
+....
+|  15487 | Kings         | Raptors          | Visitante      |
+|  15488 | Kings         | Lakers           | Visitante      |
+|  15489 | Kings         | Grizzlies        | Local          |
+|  15490 | Kings         | Clippers         | NULL           |
+|  15491 | Kings         | Knicks           | Visitante      |
+|  15492 | Kings         | Timberwolves     | Visitante      |
+|  15493 | Kings         | Celtics          | Local          |
+|  15494 | Kings         | 76ers            | Visitante      |
+|  15495 | Kings         | Nets             | Visitante      |
+|  15496 | Kings         | Pistons          | Local          |
+|  15497 | Kings         | Cavaliers        | Visitante      |
+|  15498 | Kings         | Pacers           | Local          |
+|  15499 | Kings         | Bulls            | Visitante      |
+|  15500 | Kings         | Bucks            | Visitante      |
+|  15501 | Kings         | Magic            | Visitante      |
+|  15502 | Kings         | Wizards          | Visitante      |
+|  15503 | Kings         | Hawks            | Visitante      |
+|  15504 | Kings         | Bobcats          | Local          |
+|  15505 | Kings         | Heat             | Local          |
+|  15506 | Kings         | Jazz             | Local          |
+|  15507 | Kings         | Nuggets          | Local          |
+|  15508 | Kings         | Trail Blazers    | Local          |
+|  15509 | Kings         | Supersonics      | Visitante      |
+|  15510 | Kings         | Warriors         | Visitante      |
+|  15511 | Kings         | Hornets          | Local          |
+|  15512 | Kings         | Spurs            | Local          |
+|  15513 | Kings         | Rockets          | Visitante      |
+|  15514 | Kings         | Mavericks        | Visitante      |
+|  15515 | Kings         | Suns             | Visitante      |
+|  15516 | Hornets       | Raptors          | Local          |
+|  15517 | Hornets       | Lakers           | Local          |
+|  15518 | Hornets       | Grizzlies        | Visitante      |
+|  15519 | Hornets       | Clippers         | Local          |
+|  15520 | Hornets       | Knicks           | Visitante      |
+|  15521 | Hornets       | Timberwolves     | Local          |
+|  15522 | Hornets       | Celtics          | Visitante      |
+|  15523 | Hornets       | 76ers            | Local          |
+|  15524 | Hornets       | Nets             | Local          |
+|  15525 | Hornets       | Pistons          | Visitante      |
+|  15526 | Hornets       | Cavaliers        | Local          |
+|  15527 | Hornets       | Pacers           | Visitante      |
+|  15528 | Hornets       | Bulls            | Visitante      |
+|  15529 | Hornets       | Bucks            | Local          |
+|  15530 | Hornets       | Magic            | Visitante      |
+|  15531 | Hornets       | Wizards          | Local          |
+|  15532 | Hornets       | Hawks            | Visitante      |
+|  15533 | Hornets       | Bobcats          | Visitante      |
+|  15534 | Hornets       | Heat             | Visitante      |
+|  15535 | Hornets       | Jazz             | Visitante      |
+|  15536 | Hornets       | Nuggets          | Local          |
+|  15537 | Hornets       | Trail Blazers    | Visitante      |
+|  15538 | Hornets       | Supersonics      | Visitante      |
+|  15539 | Hornets       | Warriors         | Visitante      |
+|  15540 | Hornets       | Kings            | Local          |
+|  15541 | Hornets       | Spurs            | Visitante      |
+|  15542 | Hornets       | Rockets          | Local          |
+|  15543 | Hornets       | Mavericks        | Visitante      |
+|  15544 | Hornets       | Suns             | Local          |
+|  15545 | Spurs         | Raptors          | Visitante      |
+|  15546 | Spurs         | Lakers           | Local          |
+|  15547 | Spurs         | Grizzlies        | Local          |
+|  15548 | Spurs         | Clippers         | Local          |
+|  15549 | Spurs         | Knicks           | Visitante      |
+|  15550 | Spurs         | Timberwolves     | Visitante      |
+|  15551 | Spurs         | Celtics          | Visitante      |
+|  15552 | Spurs         | 76ers            | Visitante      |
+|  15553 | Spurs         | Nets             | Local          |
+|  15554 | Spurs         | Pistons          | Visitante      |
+|  15555 | Spurs         | Cavaliers        | Local          |
+|  15556 | Spurs         | Pacers           | Local          |
+|  15557 | Spurs         | Bulls            | Visitante      |
+|  15558 | Spurs         | Bucks            | Local          |
+|  15559 | Spurs         | Magic            | Visitante      |
+|  15560 | Spurs         | Wizards          | Local          |
+|  15561 | Spurs         | Hawks            | Visitante      |
+|  15562 | Spurs         | Bobcats          | Local          |
+|  15563 | Spurs         | Heat             | Local          |
+|  15564 | Spurs         | Jazz             | Visitante      |
+|  15565 | Spurs         | Nuggets          | Visitante      |
+|  15566 | Spurs         | Trail Blazers    | Visitante      |
+|  15567 | Spurs         | Supersonics      | Local          |
+|  15568 | Spurs         | Warriors         | Visitante      |
+|  15569 | Spurs         | Kings            | Visitante      |
+|  15570 | Spurs         | Hornets          | Visitante      |
+|  15571 | Spurs         | Rockets          | Local          |
+|  15572 | Spurs         | Mavericks        | Local          |
+|  15573 | Spurs         | Suns             | Local          |
+|  15574 | Rockets       | Raptors          | Visitante      |
+|  15575 | Rockets       | Lakers           | Local          |
+|  15576 | Rockets       | Grizzlies        | Visitante      |
+|  15577 | Rockets       | Clippers         | Local          |
+|  15578 | Rockets       | Knicks           | Local          |
+|  15579 | Rockets       | Timberwolves     | Visitante      |
+|  15580 | Rockets       | Celtics          | Visitante      |
+|  15581 | Rockets       | 76ers            | Local          |
+|  15582 | Rockets       | Nets             | Visitante      |
+|  15583 | Rockets       | Pistons          | Local          |
+|  15584 | Rockets       | Cavaliers        | Local          |
+|  15585 | Rockets       | Pacers           | Local          |
+|  15586 | Rockets       | Bulls            | Visitante      |
+|  15587 | Rockets       | Bucks            | Visitante      |
+|  15588 | Rockets       | Magic            | Local          |
+|  15589 | Rockets       | Wizards          | Local          |
+|  15590 | Rockets       | Hawks            | Visitante      |
+|  15591 | Rockets       | Bobcats          | Local          |
+|  15592 | Rockets       | Heat             | Visitante      |
+|  15593 | Rockets       | Jazz             | Local          |
+|  15594 | Rockets       | Nuggets          | Visitante      |
+|  15595 | Rockets       | Trail Blazers    | Local          |
+|  15596 | Rockets       | Supersonics      | Visitante      |
+|  15597 | Rockets       | Warriors         | Local          |
+|  15598 | Rockets       | Kings            | Visitante      |
+|  15599 | Rockets       | Hornets          | Visitante      |
+|  15600 | Rockets       | Spurs            | Local          |
+|  15601 | Rockets       | Mavericks        | Visitante      |
+|  15602 | Rockets       | Suns             | Visitante      |
+|  15603 | Mavericks     | Raptors          | Local          |
+|  15604 | Mavericks     | Lakers           | Local          |
+|  15605 | Mavericks     | Grizzlies        | Local          |
+|  15606 | Mavericks     | Clippers         | Visitante      |
+|  15607 | Mavericks     | Knicks           | Visitante      |
+|  15608 | Mavericks     | Timberwolves     | Visitante      |
+|  15609 | Mavericks     | Celtics          | Local          |
+|  15610 | Mavericks     | 76ers            | Local          |
+|  15611 | Mavericks     | Nets             | Visitante      |
+|  15612 | Mavericks     | Pistons          | Local          |
+|  15613 | Mavericks     | Cavaliers        | Visitante      |
+|  15614 | Mavericks     | Pacers           | Visitante      |
+|  15615 | Mavericks     | Bulls            | Local          |
+|  15616 | Mavericks     | Bucks            | Visitante      |
+|  15617 | Mavericks     | Magic            | Local          |
+|  15618 | Mavericks     | Wizards          | Visitante      |
+|  15619 | Mavericks     | Hawks            | Local          |
+|  15620 | Mavericks     | Bobcats          | Visitante      |
+|  15621 | Mavericks     | Heat             | Local          |
+|  15622 | Mavericks     | Jazz             | Local          |
+|  15623 | Mavericks     | Nuggets          | Local          |
+|  15624 | Mavericks     | Trail Blazers    | Local          |
+|  15625 | Mavericks     | Supersonics      | Local          |
+|  15626 | Mavericks     | Warriors         | Local          |
+|  15627 | Mavericks     | Kings            | Local          |
+|  15628 | Mavericks     | Hornets          | Local          |
+|  15629 | Mavericks     | Spurs            | Local          |
+|  15630 | Mavericks     | Rockets          | Visitante      |
+|  15631 | Mavericks     | Suns             | Local          |
+|  15632 | Suns          | Raptors          | Local          |
+|  15633 | Suns          | Lakers           | Visitante      |
+|  15634 | Suns          | Grizzlies        | Visitante      |
+|  15635 | Suns          | Clippers         | Local          |
+|  15636 | Suns          | Knicks           | Visitante      |
+|  15637 | Suns          | Timberwolves     | Local          |
+|  15638 | Suns          | Celtics          | Visitante      |
+|  15639 | Suns          | 76ers            | Visitante      |
+|  15640 | Suns          | Nets             | Visitante      |
+|  15641 | Suns          | Pistons          | Visitante      |
+|  15642 | Suns          | Cavaliers        | Visitante      |
+|  15643 | Suns          | Pacers           | Local          |
+|  15644 | Suns          | Bulls            | Local          |
+|  15645 | Suns          | Bucks            | Local          |
+|  15646 | Suns          | Magic            | Visitante      |
+|  15647 | Suns          | Wizards          | Visitante      |
+|  15648 | Suns          | Hawks            | Visitante      |
+|  15649 | Suns          | Bobcats          | Visitante      |
+|  15650 | Suns          | Heat             | Visitante      |
+|  15651 | Suns          | Jazz             | Local          |
+|  15652 | Suns          | Nuggets          | Local          |
+|  15653 | Suns          | Trail Blazers    | Visitante      |
+|  15654 | Suns          | Supersonics      | Local          |
+|  15655 | Suns          | Warriors         | Visitante      |
+|  15656 | Suns          | Kings            | Visitante      |
+|  15657 | Suns          | Hornets          | Local          |
+|  15658 | Suns          | Spurs            | Visitante      |
+|  15659 | Suns          | Rockets          | Local          |
+|  15660 | Suns          | Mavericks        | Visitante      |
++--------+---------------+------------------+----------------+
+15660 rows in set (0,02 sec)
+```
